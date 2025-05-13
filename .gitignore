@@ -1,0 +1,12 @@
+bin
+
+appsettings.Development.json
+appsettings.json
+
+obj
+
+.idea
+
+.vscode
+
+launchSettings.json
