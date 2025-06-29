@@ -1,17 +1,16 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SWBackend.Models.SignUp.Credentials;
-using SWBackend.Models.SignUp.PersonalData;
+using SWBackend.Models.SignUp.Identity;
 using SWBackend.Models.Workout;
 
 namespace SWBackend.DataBase;
 
-public class SWDbContext : DbContext
+public class SWDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
 {
     public SWDbContext(DbContextOptions<SWDbContext> options) : base(options){}
 
     //DbSet per ogni mia classe
-    public DbSet<CredentialM> Credentials {get; set;}
-    public DbSet<PersonalDataM> PersonalDatas { get; set; }
     public DbSet<PositionM> Positions { get; set; }
     public DbSet<ShotM> Shots { get; set; }
     public DbSet<WorkoutM> Workouts { get; set; }
@@ -21,29 +20,11 @@ public class SWDbContext : DbContext
     //configuro i miei campi del db
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        
         base.OnModelCreating(modelBuilder);
-
-        #region Signup
-        //Credentials
-        modelBuilder.Entity<CredentialM>()
-        .HasIndex(c => c.Email)
-        .IsUnique();
-
-        modelBuilder.Entity<CredentialM>()
-        .HasIndex(c => c.Username)
-        .IsUnique();
-
-        modelBuilder.Entity<CredentialM>()
-        .Property(c => c.CreationDate)
-        .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
-        modelBuilder.Entity<CredentialM>()
-        .HasOne(c => c.User)
-        .WithOne() // .WithOne() se la relazione è 1:1
-        .HasForeignKey<CredentialM>(c => c.UserId)
-        .OnDelete(DeleteBehavior.Cascade); 
-        #endregion
-
+        //TODO: Cosa fare con questo comando???
+        //modelBuilder.Entity<AppUser>().HasQueryFilter(u => u.DeleteDate == DateTime.MinValue);
+ 
         #region Workout
         modelBuilder.Entity<WorkoutM>()
         .HasIndex(w => w.WorkoutName)
