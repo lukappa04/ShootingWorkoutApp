@@ -1,6 +1,7 @@
 using System.IO.Compression;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SWBackend.DTO.UserDto;
 using SWBackend.Enum;
 using SWBackend.Models.SignUp.Identity;
@@ -102,9 +103,18 @@ public class UserService : IUserService
             _logger.LogError("Password errata");
             throw new Exception("Password errata.");
         }
+        
 
         // Genera il token JWT
         var token = _jwtService.GenerateToken(user);
+
+        // Genera il refresh token
+        var refreshToken = _jwtService.GenerateRefreshToken();
+        user.RefreshToken = refreshToken;
+        user.RefreshTokenExpiration = DateTime.UtcNow.AddDays(30);
+
+        await _userManager.UpdateAsync(user);
+
 
         // Restituisce il DTO con il token e i dati utente base
         //TODO: capire pechè Non prende bene il role e mi da errori
@@ -114,13 +124,30 @@ public class UserService : IUserService
             Username = user.UserName ?? string.Empty,
             Email = user.Email ?? string.Empty,
             Role = user.RoleCode,
-            Token = token
+            Token = token,
+            RefreshToken = refreshToken
         };
 
     }
 
+    //TODO: Decidere cosa fare, se tenere la ricerca con i metodi di indentity ma non implementare il contains(), oppure farlo manuale con il contains.
     public async Task<UserResponseDto?> GetUserByUsernameOrEmailAsync(GetUserByUsernameOrEmailRequestDto request)
     {
+        var query = request.UsernameOrEmailD.Trim().ToLower();
+
+        var user = await _userManager.Users
+            .Where(u => u.UserName.ToLower().Contains(query) || u.Email.ToLower().Contains(query))
+            .FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            _logger.LogInformation("Utente non trovato");
+            return null;
+        }
+
+        return MapToDto(user);
+
+        /*    
         var user = await _userManager.FindByNameAsync(request.UsernameOrEmailD) ?? await _userManager.FindByEmailAsync(request.UsernameOrEmailD);
         //TODO: Controllare come gestire l'erroe se un utente richiede il campo di un utente che non esiste, nello specifico se è stato eliminato.
         // if (user.DeleteDate != DateTime.MinValue)
@@ -129,6 +156,7 @@ public class UserService : IUserService
         //     throw new Exception();
         // }
         return user == null ? null : MapToDto(user);
+        */
     }
 
     public async Task<UserResponseDto?> GetUserByIdAsync(GetUserByIdRequestDto request)
@@ -164,7 +192,8 @@ public class UserService : IUserService
     public async Task<List<UserResponseDto?>> GetAllAsync()
     {
         var alluser = await _userRepository.GetAllUserAsync();
-        var result = alluser.Select(users => new UserResponseDto
+        var result = alluser.Select(users => 
+        users == null ? null : new UserResponseDto
         {
             Id = users.Id,
             Username = users.UserName ?? string.Empty,

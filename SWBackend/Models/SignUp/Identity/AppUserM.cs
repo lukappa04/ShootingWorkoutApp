@@ -15,10 +15,14 @@ public class AppUser : IdentityUser<int>
     //Ruolo Custom
     public Role RoleCode { get; set; }
 
+    //Refresh Token
+    public string? RefreshToken { get; set; }
+    public DateTime? RefreshTokenExpiration { get; set; }
+
     //metadata utente
     public DateTime CreationDate { get; set; } = DateTime.UtcNow;
     public DateTime LastUpdateAt { get; set; } = DateTime.UtcNow;
-    public DateTime DeleteDate { get; set; } = DateTime.MinValue;
+    public DateTime? DeleteDate { get; set; }
 
     public ICollection<WorkoutM>? Workouts { get; set; }
 }

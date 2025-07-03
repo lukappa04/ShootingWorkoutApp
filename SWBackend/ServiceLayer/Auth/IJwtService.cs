@@ -5,4 +5,5 @@ namespace SWBackend.ServiceLayer.Auth;
 public interface IJwtService
 {
     string GenerateToken(AppUser user);
+    string GenerateRefreshToken();
 }

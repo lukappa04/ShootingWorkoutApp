@@ -22,6 +22,7 @@ namespace SWBackend.Controllers.AuthUserController;
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterUserRequestDto request)
         {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
             var result = await _userService.CreateUserAsync(request);
             if (!result.Succeeded)
             {

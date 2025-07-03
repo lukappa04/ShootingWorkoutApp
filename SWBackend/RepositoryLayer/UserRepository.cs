@@ -38,7 +38,7 @@ public class UserRepository : IUserRepository
     public async Task<List<AppUser>> GetAllUserAsync()
     {
         return await _context.Users
-        .Where(u => u.DeleteDate == DateTime.MinValue)
+        .Where(u => u.DeleteDate == null)
         .ToListAsync();
     }
 

@@ -23,7 +23,10 @@ public class SWDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
         
         base.OnModelCreating(modelBuilder);
         //TODO: Cosa fare con questo comando???
-        //modelBuilder.Entity<AppUser>().HasQueryFilter(u => u.DeleteDate == DateTime.MinValue);
+
+        modelBuilder.Entity<AppUser>().HasQueryFilter(u => u.DeleteDate == null);
+        modelBuilder.Entity<AppUser>().HasIndex(u => u.NormalizedUserName).IsUnique();
+        modelBuilder.Entity<AppUser>().HasIndex(u => u.NormalizedEmail).IsUnique(); 
  
         #region Workout
         modelBuilder.Entity<WorkoutM>()
