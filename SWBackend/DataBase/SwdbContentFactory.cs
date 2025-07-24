@@ -4,6 +4,9 @@ using SWBackend.DataBase;
 
 namespace SWBackend.DataBase;
 
+/// <summary>
+/// 
+/// </summary>
 public class SWDbContextFactory : IDesignTimeDbContextFactory<SWDbContext>
 {
     public SWDbContext CreateDbContext(string[] args)

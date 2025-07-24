@@ -26,6 +26,12 @@ namespace SWBackend.Controllers.AuthUserController;
             _emailSender = emailSender;
         }
 
+        /// <summary>
+        /// Metodo post per l'invio della mail alla mail dell'utente specificata. Viene effettuato un controllo a db che la mail esista e che sia stata attivata.
+        /// Se passa i controlli verrà inviata con su email di riferimento ed un suo token che poi successivamente da frontend verrà preso ed usato per il cambio password
+        /// </summary>
+        /// <param name="request">DTO: Email</param>
+        /// <returns>200 se tutto va bene / 200 anche se non viene trovato, per non dare indizi. cambia solo il messaggio che verrà visualizzato</returns>
         [HttpPost]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordRequestDto request)
         {

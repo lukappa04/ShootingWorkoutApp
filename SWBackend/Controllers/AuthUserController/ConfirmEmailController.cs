@@ -7,6 +7,7 @@ namespace SWBackend.Controllers.AuthUserController;
 
 [Route("api/[controller]")]
 [ApiController]
+[Tags("AuthUser")]
 public class ConfirmEmailController : ControllerBase
 {
     private readonly ILogger<ConfirmEmailController> _logger;

@@ -24,6 +24,13 @@ namespace SWBackend.Controllers.AuthUserController;
             _userManager = userManager;
             _emailSender = emailSender;
         }
+        /// <summary>
+        /// Metodo che si pospone all ForgotPassword, una volta preso il token si inserisci nel body, insieme alla mail da cui è stato preso.
+        /// Se le due cose combaciano si può procedere e controllare che le due password (nuove) inserite combacino.
+        /// Se è così return 200(message)
+        /// </summary>
+        /// <param name="request">DTO: Email / Token / NewPassword / ConfirmPassword</param>
+        /// <returns>200</returns>
 
         [HttpPost]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordRequestDto request)
