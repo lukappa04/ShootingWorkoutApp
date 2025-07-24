@@ -8,6 +8,7 @@ using SWBackend.Models.SignUp.Identity;
 using SWBackend.RepositoryLayer.IRepository.User;
 using SWBackend.ServiceLayer.Auth;
 using SWBackend.ServiceLayer.IService.IUserService;
+using SWBackend.ServiceLayer.Mail;
 
 namespace SWBackend.ServiceLayer;
 
@@ -18,13 +19,17 @@ public class UserService : IUserService
     private readonly UserManager<AppUser> _userManager;
     private readonly IJwtService _jwtService;
     private readonly ILogger<AppRole> _logger;
+    private readonly IEmailerSender _emailSender;
+     private readonly IConfiguration _configuration;
 
-    public UserService(IUserRepository userRepository, UserManager<AppUser> userManager, IJwtService jwtService, ILogger<AppRole> logger)
+    public UserService(IUserRepository userRepository, UserManager<AppUser> userManager, IJwtService jwtService, ILogger<AppRole> logger, IEmailerSender emailerSender, IConfiguration configuration)
     {
         _userRepository = userRepository;
         _userManager = userManager;
         _jwtService = jwtService;
         _logger = logger;
+        _emailSender = emailerSender;
+        _configuration = configuration;
     }
 
     public async Task<bool> CheckPasswordAsync(LoginRequestDto dto)
@@ -46,8 +51,23 @@ public class UserService : IUserService
             BirthDay = dto.BirthDay,
             //RoleCode = Enum.Parse<Role>(dto.) // gestisci il parsing con attenzione
         };
+        var result = await _userRepository.CreateUserAsync(user, dto.Password);
 
-        return await _userRepository.CreateUserAsync(user, dto.Password);
+        if (result.Succeeded)
+        {
+            // 1. Genera il token di conferma email
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var baseUrl = _configuration["AppSettings:BackendBaseUrl"];
+
+            // 2. Costruisci il link di conferma (potresti passare Host da fuori o usare config)
+            var confirmationLink = $"{baseUrl}/api/ConfirmEmail/confirm-email?userId={user.Id}&token={Uri.EscapeDataString(token)}";
+
+            // 3. Invia l'email
+            await _emailSender.SendEmailAsync(user.Email, "Conferma la tua email",
+                $"<p>Clicca il seguente link per confermare la tua registrazione:</p><p><a href='{confirmationLink}'>Conferma Email</a></p>");
+        }
+
+        return result;
     }
 
     public async Task<bool> EmailExistsAsync(string email)

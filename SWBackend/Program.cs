@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -13,6 +14,7 @@ using SWBackend.RepositoryLayer.IRepository.User;
 using SWBackend.ServiceLayer;
 using SWBackend.ServiceLayer.Auth;
 using SWBackend.ServiceLayer.IService.IUserService;
+using SWBackend.ServiceLayer.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +23,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<SWDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = true;
+});
 
 
 builder.Services.AddEndpointsApiExplorer();
@@ -33,13 +40,23 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 
-
+//TODO: In fasi finali cambiare il numero minimo richiesto da 6 ad 8/12
 builder.Services.AddIdentity<AppUser, IdentityRole<int>>(options =>
 {
-    // qui puoi configurare opzioni Identity
-    options.Password.RequireDigit = true;
-    options.Password.RequiredLength = 6;
-    // altre opzioni...
+    //IMPOSTAZIONI PER EMAIL
+    options.SignIn.RequireConfirmedEmail = true; 
+    options.User.RequireUniqueEmail = true;
+
+    //IMPOSTAZIONI PER PASSWORD
+    options.Password.RequireDigit = true;               // Deve contenere almeno un numero (0-9)
+    options.Password.RequiredLength = 6;                // Lunghezza minima (default = 6)
+    options.Password.RequireNonAlphanumeric = true;     // Deve contenere almeno un simbolo (!, @, #, etc.)
+    options.Password.RequireUppercase = true;           // Deve contenere almeno una maiuscola
+    options.Password.RequireLowercase = true;           // Deve contenere almeno una minuscola
+    options.Password.RequiredUniqueChars = 1;           // Minimo numero di caratteri unici
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+
 })
 .AddEntityFrameworkStores<SWDbContext>()  // usa il tuo DbContext con Identity
 .AddDefaultTokenProviders();
@@ -81,6 +98,8 @@ builder.Services.AddAuthentication(options =>
         NameClaimType = ClaimTypes.Name
     };
 });
+
+builder.Services.AddTransient<IEmailerSender, SmtpEmailSender>();
 
 
 builder.Services.AddSwaggerGen(

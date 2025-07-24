@@ -3,8 +3,6 @@ bin
 appsettings.Development.json
 appsettings.json
 
-SwdbContentFactory.cs
-
 obj
 
 .idea
