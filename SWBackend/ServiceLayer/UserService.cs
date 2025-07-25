@@ -123,8 +123,21 @@ public class UserService : IUserService
             _logger.LogError("Password errata");
             throw new Exception("Password errata.");
         }
-        
 
+        //Se il 2FA è abilitato
+        if (await _userManager.GetTwoFactorEnabledAsync(user))
+        {
+            var tokenTf = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+            await _emailSender.SendEmailAsync(user.Email, "Codice di sicurezza",
+                $"Il tuo codice di verifica 2FA è: {tokenTf}");
+            return new AuthenticationResponseDto
+            {
+                Email = user.Email,
+                Requires2FA = true
+            };
+        }
+
+        //Altrimenti si continua con il login 
         // Genera il token JWT
         var token = _jwtService.GenerateToken(user);
 
@@ -145,7 +158,8 @@ public class UserService : IUserService
             Email = user.Email ?? string.Empty,
             Role = user.RoleCode,
             Token = token,
-            RefreshToken = refreshToken
+            RefreshToken = refreshToken,
+            Requires2FA = false
         };
 
     }
@@ -236,6 +250,71 @@ public class UserService : IUserService
         }
         var result = await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
         return result;
+    }
+
+    /// <summary>
+    /// Metodo che controlla la valitià del 2FA Token. Si aspetta di ricevere l'email dell'utente interessato + il codice allegato.
+    /// Se la mail esiste ed il codice è valido genera un JWT ed un RefreshToken per permettere il login
+    /// </summary>
+    /// <param name="request">Email / Code</param>
+    /// <returns></returns>
+    /// <exception cref="Exception">Se la mail non esiste / Se il codice passato non è valido</exception>
+    public async Task<AuthenticationResponseDto> VerifyTwoFactorAsync(TwoFactoryVerifyRequestDto request)
+    {
+        var user = await _userManager.FindByEmailAsync(request.Email);
+        if (user == null)
+        {
+            _logger.LogError("Log: User not found!");
+            throw new Exception("Ex: User not found!");
+        }
+
+        var isValid = await _userManager.VerifyTwoFactorTokenAsync(user, "Email", request.Code);
+        if (!isValid)
+        {
+            _logger.LogError("Log: Invalid code!");
+            throw new Exception("Ex: Invalid code!");
+        }
+        var token = _jwtService.GenerateToken(user);
+        var refreshToken = _jwtService.GenerateRefreshToken();
+        user.RefreshToken = refreshToken;
+        
+        user.RefreshTokenExpiration = DateTime.UtcNow.AddDays(30);
+        await _userManager.UpdateAsync(user);
+        
+        return new AuthenticationResponseDto
+        {
+            Id = user.Id,
+            Username = user.UserName ?? string.Empty,
+            Email = user.Email ?? string.Empty,
+            Role = user.RoleCode,
+            Token = token,
+            RefreshToken = refreshToken,
+            Requires2FA = false
+        };
+    }
+
+    public async Task EnableTwoFactorAuthAsync(int userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user == null)
+        {
+            _logger.LogError("Log: User not found!");
+            throw new Exception("Ex: User not found!");
+        }
+        user.TwoFactorEnabled = true;
+        await _userManager.UpdateAsync(user);
+    }
+
+    public async Task DisableTwoFactorAuthAsync(int userId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
+        if (user == null)
+        {
+            _logger.LogError("Log: User not found!");
+            throw new Exception("Ex: User not found!");
+        }
+        user.TwoFactorEnabled = false;
+        await _userManager.UpdateAsync(user);
     }
 }
 

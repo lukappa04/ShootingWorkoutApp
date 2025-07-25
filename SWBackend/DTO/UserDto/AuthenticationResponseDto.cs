@@ -1,7 +1,9 @@
 using SWBackend.Enum;
 
 namespace SWBackend.DTO.UserDto;
-
+/// <summary>
+/// DTO: contiene tutti i dati utili per l'autenticazione dell'utente
+/// </summary>
 public sealed class AuthenticationResponseDto
 {
     public int Id { get; set; }
@@ -10,4 +12,5 @@ public sealed class AuthenticationResponseDto
     public Role Role { get; set; }
     public string Token { get; set; } = string.Empty;
     public string? RefreshToken { get; set; }
+    public bool Requires2FA { get; set; }
 }

@@ -17,6 +17,9 @@ public interface IUserService
     Task<UserResponseDto?> GetUserByIdAsync(GetUserByIdRequestDto request);
     Task<bool> SoftDelete(DeleteUserRequestDto request);
     Task<IdentityResult> ChangePasswordAsync(string username, ChangePasswordRequestDto request);
+    Task<AuthenticationResponseDto> VerifyTwoFactorAsync(TwoFactoryVerifyRequestDto request);
+    Task EnableTwoFactorAuthAsync(int userId);
+    Task DisableTwoFactorAuthAsync(int userId);
     
 
 }

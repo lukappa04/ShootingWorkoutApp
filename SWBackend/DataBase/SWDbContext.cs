@@ -27,6 +27,7 @@ public class SWDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
         modelBuilder.Entity<AppUser>().HasQueryFilter(u => u.DeleteDate == null);
         modelBuilder.Entity<AppUser>().HasIndex(u => u.NormalizedUserName).IsUnique();
         modelBuilder.Entity<AppUser>().HasIndex(u => u.NormalizedEmail).IsUnique(); 
+        modelBuilder.Entity<AppUser>().Property(o => o.RoleCode).HasConversion<string>();
  
         #region Workout
         modelBuilder.Entity<WorkoutM>()

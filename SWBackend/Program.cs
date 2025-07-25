@@ -1,6 +1,7 @@
 using System;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -46,6 +47,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole<int>>(options =>
     //IMPOSTAZIONI PER EMAIL
     options.SignIn.RequireConfirmedEmail = true; 
     options.User.RequireUniqueEmail = true;
+    options.Tokens.ProviderMap.Add("Email", new TokenProviderDescriptor(typeof(EmailTokenProvider<AppUser>)));
 
     //IMPOSTAZIONI PER PASSWORD
     options.Password.RequireDigit = true;               // Deve contenere almeno un numero (0-9)
@@ -77,6 +79,7 @@ builder.Services.AddIdentity<AppUser, IdentityRole<int>>(options =>
 //         };
 //     });
 
+//Add the Bearer check per inserire il JWT rilasciato dal login ed ufficialmente usare la sessione avviata ed i permessi
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -100,6 +103,10 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddTransient<IEmailerSender, SmtpEmailSender>();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 
 builder.Services.AddSwaggerGen(

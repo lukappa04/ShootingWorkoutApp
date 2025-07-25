@@ -14,7 +14,7 @@ namespace SWBackend.Controllers.AuthUserController;
 
     [Route("api/[controller]")]
     [ApiController]
-    [Tags("AuthUser")]
+    [Tags("AuthUser/PasswordReset")]
     public class ForgotPasswordController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
