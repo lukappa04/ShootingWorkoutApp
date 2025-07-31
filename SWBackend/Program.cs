@@ -15,6 +15,7 @@ using SWBackend.RepositoryLayer.IRepository.User;
 using SWBackend.ServiceLayer;
 using SWBackend.ServiceLayer.Auth;
 using SWBackend.ServiceLayer.IService.IUserService;
+using SWBackend.ServiceLayer.Log;
 using SWBackend.ServiceLayer.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -155,6 +156,9 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseMiddleware<UserActionLoggingMiddleware>();
+
 
 app.MapControllers();
 

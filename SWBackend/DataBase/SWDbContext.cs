@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SWBackend.Models.Log;
 using SWBackend.Models.SignUp.Identity;
 using SWBackend.Models.Workout;
 
@@ -16,6 +17,7 @@ public class SWDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
     public DbSet<WorkoutM> Workouts { get; set; }
     public DbSet<WorkoutPositionM> WorkoutPositions { get; set; }
     public DbSet<WorkoutSessionM> WorkoutSessions { get; set; }
+    public DbSet<UserActionLog> UserActionLogs { get; set; }
 
     //configuro i miei campi del db
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,10 +26,12 @@ public class SWDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
         base.OnModelCreating(modelBuilder);
         //TODO: Cosa fare con questo comando???
 
+        #region User
         modelBuilder.Entity<AppUser>().HasQueryFilter(u => u.DeleteDate == null);
         modelBuilder.Entity<AppUser>().HasIndex(u => u.NormalizedUserName).IsUnique();
         modelBuilder.Entity<AppUser>().HasIndex(u => u.NormalizedEmail).IsUnique(); 
         modelBuilder.Entity<AppUser>().Property(o => o.RoleCode).HasConversion<string>();
+        #endregion
  
         #region Workout
         modelBuilder.Entity<WorkoutM>()
