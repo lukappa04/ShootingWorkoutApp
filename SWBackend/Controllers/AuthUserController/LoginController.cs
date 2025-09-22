@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SWBackend.DTO.UserDto;
@@ -22,7 +23,9 @@ public class LoginController : ControllerBase
     /// </summary>
     /// <param name="request">DTO: Email or Username / Password</param>
     /// <returns>200 / Exception</returns>
-    [HttpPost("login")]
+    
+    [AllowAnonymous]
+    [HttpPost]
     public async Task<IActionResult> Login(LoginRequestDto request)
     {
         try

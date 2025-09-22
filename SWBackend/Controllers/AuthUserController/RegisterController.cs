@@ -19,7 +19,7 @@ namespace SWBackend.Controllers.AuthUserController;
             _logger = logger;
         }
 
-        [HttpPost("register")]
+        [HttpPost]
         public async Task<IActionResult> Register(RegisterUserRequestDto request)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);

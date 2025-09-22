@@ -10,6 +10,8 @@ using SWBackend.ServiceLayer.Auth;
 using SWBackend.ServiceLayer.IService.IUserService;
 using SWBackend.ServiceLayer.Mail;
 
+
+
 namespace SWBackend.ServiceLayer;
 
 
@@ -20,9 +22,10 @@ public class UserService : IUserService
     private readonly IJwtService _jwtService;
     private readonly ILogger<AppRole> _logger;
     private readonly IEmailerSender _emailSender;
-     private readonly IConfiguration _configuration;
+    private readonly IConfiguration _configuration;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public UserService(IUserRepository userRepository, UserManager<AppUser> userManager, IJwtService jwtService, ILogger<AppRole> logger, IEmailerSender emailerSender, IConfiguration configuration)
+    public UserService(IUserRepository userRepository, UserManager<AppUser> userManager, IJwtService jwtService, ILogger<AppRole> logger, IEmailerSender emailerSender, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
     {
         _userRepository = userRepository;
         _userManager = userManager;
@@ -30,6 +33,7 @@ public class UserService : IUserService
         _logger = logger;
         _emailSender = emailerSender;
         _configuration = configuration;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<bool> CheckPasswordAsync(LoginRequestDto dto)
@@ -91,20 +95,6 @@ public class UserService : IUserService
     {
         return await _userRepository.UsernameExistsAsync(username);
     }
-    private static UserResponseDto MapToDto(AppUser user)
-    {
-        return new UserResponseDto
-        {
-            Id = user.Id,
-            Username = user.UserName ?? string.Empty,
-            Email = user.Email ?? string.Empty,
-            Name = user.Name,
-            Surname = user.Surname,
-            Age = user.Age,
-            BirthDay = user.BirthDay,
-            Role = user.RoleCode.ToString()
-        };
-    }
     public async Task<AuthenticationResponseDto?> LoginAsync(LoginRequestDto request)
     {
         var user = await _userManager.FindByNameAsync(request.UsernameOrEmailD)
@@ -145,6 +135,8 @@ public class UserService : IUserService
         var refreshToken = _jwtService.GenerateRefreshToken();
         user.RefreshToken = refreshToken;
         user.RefreshTokenExpiration = DateTime.UtcNow.AddDays(30);
+        
+       
 
         await _userManager.UpdateAsync(user);
 
@@ -316,5 +308,22 @@ public class UserService : IUserService
         user.TwoFactorEnabled = false;
         await _userManager.UpdateAsync(user);
     }
+    
+    // Private
+    private static UserResponseDto MapToDto(AppUser user)
+    {
+        return new UserResponseDto
+        {
+            Id = user.Id,
+            Username = user.UserName ?? string.Empty,
+            Email = user.Email ?? string.Empty,
+            Name = user.Name,
+            Surname = user.Surname,
+            Age = user.Age,
+            BirthDay = user.BirthDay,
+            Role = user.RoleCode.ToString()
+        };
+    }
+   //------
 }
 

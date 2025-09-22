@@ -4,10 +4,10 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using SWBackend;
 using SWBackend.DataBase;
 using SWBackend.Models.SignUp.Identity;
 using SWBackend.RepositoryLayer;
@@ -41,6 +41,18 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AngularDevPolicy", policy =>
+    {
+        policy
+            .WithOrigins(CorsOrigin.AllowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        // .AllowCredentials(); // se usi cookie-based auth abilita, altrimenti no
+    });
+});
 
 //TODO: In fasi finali cambiare il numero minimo richiesto da 6 ad 8/12
 builder.Services.AddIdentity<AppUser, IdentityRole<int>>(options =>
@@ -153,6 +165,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseRouting();
+app.UseCors("AngularDevPolicy");
 
 app.UseAuthentication();
 app.UseAuthorization();
