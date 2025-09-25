@@ -10,3 +10,6 @@ obj
 .vscode
 
 launchSettings.json
+
+/SWFrontendNg_02/src/Environments/
+/SWFrontendNg_02/src/app/EndPoint/
