@@ -13,4 +13,5 @@ public class PositionM : IObject
     public double Position_Y { get; set; }
 
     public ICollection<WorkoutPositionM> UsedInWorkouts { get; set; } = new List<WorkoutPositionM>();
+    public ICollection<ShotM> PositionShots { get; set; } = new List<ShotM>();
 }

@@ -9,8 +9,8 @@ public class WorkoutSessionM : IObject
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
 
-    public WorkoutM? WorkId { get; set; }
-    public int WorkoutId { get; set; }
+    public WorkoutM Workouts { get; set; }
+    public int? WorkoutId { get; set; }
 
     public DateTime StartTime { get; set; }
     public DateTime EndTime { get; set; }

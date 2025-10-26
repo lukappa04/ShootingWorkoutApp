@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using SWBackend.Enum;
+using SWBackend.Models.Token;
 using SWBackend.Models.Workout;
 
 namespace SWBackend.Models.SignUp.Identity;
@@ -16,13 +17,14 @@ public class AppUser : IdentityUser<int>
     public Role RoleCode { get; set; }
 
     //Refresh Token
-    public string? RefreshToken { get; set; }
-    public DateTime? RefreshTokenExpiration { get; set; }
+    // public string? RefreshToken { get; set; }
+    // public DateTime? RefreshTokenExpiration { get; set; }
 
     //metadata utente
     public DateTime CreationDate { get; set; } = DateTime.UtcNow;
     public DateTime LastUpdateAt { get; set; } = DateTime.UtcNow;
     public DateTime? DeleteDate { get; set; }
 
-    public ICollection<WorkoutM>? Workouts { get; set; }
+    public ICollection<WorkoutM> Workouts { get; set; } = [];
+    public ICollection<RefreshToken>? RefreshTokens { get; set; }
 }

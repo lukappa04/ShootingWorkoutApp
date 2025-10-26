@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using SWBackend.DTO.UserDto;
 using SWBackend.Enum;
 using SWBackend.Models.SignUp.Identity;
+using SWBackend.Models.Token;
+using SWBackend.RepositoryLayer.IRepository;
 using SWBackend.RepositoryLayer.IRepository.User;
 using SWBackend.ServiceLayer.Auth;
 using SWBackend.ServiceLayer.IService.IUserService;
@@ -24,8 +26,9 @@ public class UserService : IUserService
     private readonly IEmailerSender _emailSender;
     private readonly IConfiguration _configuration;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly ITokenRepository _tokenRepository;
 
-    public UserService(IUserRepository userRepository, UserManager<AppUser> userManager, IJwtService jwtService, ILogger<AppRole> logger, IEmailerSender emailerSender, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+    public UserService(IUserRepository userRepository, UserManager<AppUser> userManager, IJwtService jwtService, ILogger<AppRole> logger, IEmailerSender emailerSender, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, ITokenRepository tokenRepository)
     {
         _userRepository = userRepository;
         _userManager = userManager;
@@ -34,6 +37,7 @@ public class UserService : IUserService
         _emailSender = emailerSender;
         _configuration = configuration;
         _httpContextAccessor = httpContextAccessor;
+        _tokenRepository = tokenRepository;
     }
 
     public async Task<bool> CheckPasswordAsync(LoginRequestDto dto)
@@ -97,6 +101,11 @@ public class UserService : IUserService
     }
     public async Task<AuthenticationResponseDto?> LoginAsync(LoginRequestDto request)
     {
+        var httpContext = _httpContextAccessor.HttpContext;
+        string requestIp = httpContext?.Connection?.RemoteIpAddress?.ToString() ?? "unknown";
+        string userAgent = httpContext?.Request?.Headers["User-Agent"].ToString() ?? "unknown";
+
+
         var user = await _userManager.FindByNameAsync(request.UsernameOrEmailD)
           ?? await _userManager.FindByEmailAsync(request.UsernameOrEmailD);
 
@@ -132,17 +141,27 @@ public class UserService : IUserService
         var token = _jwtService.GenerateToken(user);
 
         // Genera il refresh token
-        var refreshToken = _jwtService.GenerateRefreshToken();
-        user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiration = DateTime.UtcNow.AddDays(30);
+        var refreshToken = TokenMethod.GenerateRefreshToken(64);
+        var refreshHash = TokenMethod.HashToken(refreshToken);
         
-       
+        await _tokenRepository.Save(new RefreshToken{
+            UserId = user.Id,
+            TokenHash = refreshHash,
+            Expires = DateTime.UtcNow.AddDays(30),
+            Created = DateTime.UtcNow,
+            CreatedByIp = requestIp,
+            UserAgent = userAgent
+        });
+        
+        // user.RefreshToken = refreshToken;
+        // user.RefreshTokenExpiration = DateTime.UtcNow.AddDays(30);
+        
+       CookiesMethod.SetRefreshTokenCookie(_httpContextAccessor?.HttpContext?.Response, refreshToken, DateTime.Now.AddDays(30));
 
-        await _userManager.UpdateAsync(user);
+        //await _userManager.UpdateAsync(user);
 
 
         // Restituisce il DTO con il token e i dati utente base
-        //TODO: capire pechè Non prende bene il role e mi da errori
         return new AuthenticationResponseDto
         {
             Id = user.Id,
@@ -253,6 +272,9 @@ public class UserService : IUserService
     /// <exception cref="Exception">Se la mail non esiste / Se il codice passato non è valido</exception>
     public async Task<AuthenticationResponseDto> VerifyTwoFactorAsync(TwoFactoryVerifyRequestDto request)
     {
+        var httpContext = _httpContextAccessor.HttpContext;
+        string requestIp = httpContext?.Connection?.RemoteIpAddress?.ToString() ?? "unknown";
+        string userAgent = httpContext?.Request?.Headers["User-Agent"].ToString() ?? "unknown";
         var user = await _userManager.FindByEmailAsync(request.Email);
         if (user == null)
         {
@@ -266,12 +288,23 @@ public class UserService : IUserService
             _logger.LogError("Log: Invalid code!");
             throw new Exception("Ex: Invalid code!");
         }
-        var token = _jwtService.GenerateToken(user);
-        var refreshToken = _jwtService.GenerateRefreshToken();
-        user.RefreshToken = refreshToken;
         
-        user.RefreshTokenExpiration = DateTime.UtcNow.AddDays(30);
-        await _userManager.UpdateAsync(user);
+        //TODO: Fix this implementation
+        var token = _jwtService.GenerateToken(user);
+        // Genera il refresh token
+        var refreshToken = TokenMethod.GenerateRefreshToken(64);
+        var refreshHash = TokenMethod.HashToken(refreshToken);
+        
+        await _tokenRepository.Save(new RefreshToken{
+            UserId = user.Id,
+            TokenHash = refreshHash,
+            Expires = DateTime.UtcNow.AddDays(30),
+            Created = DateTime.UtcNow,
+            CreatedByIp = requestIp,
+            UserAgent = userAgent
+        });
+        
+        CookiesMethod.SetRefreshTokenCookie(_httpContextAccessor?.HttpContext?.Response, refreshToken, DateTime.Now.AddDays(30));
         
         return new AuthenticationResponseDto
         {
@@ -324,6 +357,7 @@ public class UserService : IUserService
             Role = user.RoleCode.ToString()
         };
     }
-   //------
+    
+  
 }
 

@@ -11,12 +11,15 @@ using SWBackend;
 using SWBackend.DataBase;
 using SWBackend.Models.SignUp.Identity;
 using SWBackend.RepositoryLayer;
+using SWBackend.RepositoryLayer.IRepository;
 using SWBackend.RepositoryLayer.IRepository.User;
+using SWBackend.RepositoryLayer.IRepository.WorkoutR;
 using SWBackend.ServiceLayer;
 using SWBackend.ServiceLayer.Auth;
 using SWBackend.ServiceLayer.IService.IUserService;
 using SWBackend.ServiceLayer.Log;
 using SWBackend.ServiceLayer.Mail;
+using SWBackend.ServiceLayer.WorkoutS;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +34,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.SignIn.RequireConfirmedEmail = true;
 });
 
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -40,7 +44,12 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
+builder.Services.AddScoped<IWorkoutService, WorkoutService>();
+
 builder.Services.AddScoped<IJwtService, JwtService>();
+
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddCors(options =>
 {
@@ -49,8 +58,8 @@ builder.Services.AddCors(options =>
         policy
             .WithOrigins(CorsOrigin.AllowedOrigins)
             .AllowAnyHeader()
-            .AllowAnyMethod();
-        // .AllowCredentials(); // se usi cookie-based auth abilita, altrimenti no
+            .AllowAnyMethod()
+            .AllowCredentials(); // se usi cookie-based auth abilita, altrimenti no
     });
 });
 
@@ -161,7 +170,12 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "SW_Jwt v1");
+        options.EnablePersistAuthorization();
+        options.DocumentTitle = "SW Backend API";
+    });
 }
 
 app.UseHttpsRedirection();

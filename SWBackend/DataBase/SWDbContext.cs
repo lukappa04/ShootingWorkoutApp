@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SWBackend.Models.Log;
 using SWBackend.Models.SignUp.Identity;
+using SWBackend.Models.Token;
 using SWBackend.Models.Workout;
 
 namespace SWBackend.DataBase;
@@ -17,6 +18,7 @@ public class SWDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
     public DbSet<WorkoutM> Workouts { get; set; }
     public DbSet<WorkoutPositionM> WorkoutPositions { get; set; }
     public DbSet<WorkoutSessionM> WorkoutSessions { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<UserActionLog> UserActionLogs { get; set; }
 
     //configuro i miei campi del db
@@ -37,33 +39,34 @@ public class SWDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
         modelBuilder.Entity<WorkoutM>()
         .HasIndex(w => w.WorkoutName)
         .IsUnique();
+        #endregion
 
         #region FK
         //ShotM
         modelBuilder.Entity<ShotM>()
         .HasOne(s => s.WPosition)
-        .WithMany()
+        .WithMany(s => s.PositionShots)
         .HasForeignKey(s => s.PositionId)
         .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<ShotM>()
         .HasOne(s => s.WSession)
-        .WithMany()
+        .WithMany(s => s.SessionShots)
         .HasForeignKey(s => s.SessionId)
         .OnDelete(DeleteBehavior.Cascade);
 
         //WorkoutPositionM
         modelBuilder.Entity<WorkoutPositionM>()
-        .HasOne(s => s.WPosition)
-        .WithMany()
-        .HasForeignKey(s => s.PositionId)
-        .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(wp => wp.Workout)
+            .WithMany(w => w.Positions)
+            .HasForeignKey(wp => wp.WorkoutId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<WorkoutPositionM>()
-        .HasOne(w => w.WorkId)
-        .WithMany()
-        .HasForeignKey(w => w.WorkoutId)
-        .OnDelete(DeleteBehavior.Cascade);
+            .HasOne(wp => wp.Position)
+            .WithMany(wp => wp.UsedInWorkouts)
+            .HasForeignKey(wp => wp.PositionId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<WorkoutPositionM>()
         .HasIndex(wp => new { wp.WorkoutId, wp.PositionId })
@@ -71,19 +74,35 @@ public class SWDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
 
         //WorkoutM
         modelBuilder.Entity<WorkoutM>()
-        .HasOne(w => w.PDUser)
-        .WithMany()
+        .HasOne(x => x.AppUser)
+        .WithMany(x => x.Workouts)
         .HasForeignKey(w => w.UserId)
         .OnDelete(DeleteBehavior.Cascade);
-
+        
+        modelBuilder.Entity<WorkoutM>()
+            .Property(w => w.Id)
+            .ValueGeneratedOnAdd();
+        
         //Workout Session
         modelBuilder.Entity<WorkoutSessionM>()
-        .HasOne(w => w.WorkId)
-        .WithOne()
-        .HasForeignKey<WorkoutSessionM>(w => w.WorkoutId)
+        .HasOne(w => w.Workouts)
+        .WithMany(w => w.Sessions)
+        .HasForeignKey(w => w.WorkoutId)
         .OnDelete(DeleteBehavior.Cascade);
-
         #endregion
+        
+        
+        #region RefreshToken
+        modelBuilder.Entity<RefreshToken>()
+            .HasOne(r => r.User)
+            .WithMany(u => u.RefreshTokens)
+            .HasForeignKey(r => r.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RefreshToken>()
+            .Property(r => r.TokenHash)
+            .HasMaxLength(128);
+
         #endregion
     }
 }
