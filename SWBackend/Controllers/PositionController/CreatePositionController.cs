@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SWBackend.DTO.WorkoutDto.PositionDto;
 using SWBackend.Models.Workout;
+using SWBackend.ServiceLayer.IService.IWorkoutService;
 using SWBackend.ServiceLayer.WorkoutS;
 
 namespace SWBackend.Controllers.PositionController

@@ -1,7 +1,6 @@
 ﻿using SWBackend.DTO.WorkoutDto.PositionDto;
-using SWBackend.Models.Workout;
 
-namespace SWBackend.ServiceLayer.WorkoutS;
+namespace SWBackend.ServiceLayer.IService.IWorkoutService;
 
 public interface IPositionService
 {

@@ -1,4 +1,4 @@
-﻿namespace SWBackend.Models.Log;
+﻿namespace swbackend.Db.Models.Log;
 
 public class UserActionLog
 {

@@ -1,6 +1,7 @@
 
 using Microsoft.AspNetCore.Mvc;
 using SWBackend.DTO.WorkoutDto.PositionDto;
+using SWBackend.ServiceLayer.IService.IWorkoutService;
 using SWBackend.ServiceLayer.WorkoutS;
 
 

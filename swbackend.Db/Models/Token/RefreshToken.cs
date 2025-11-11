@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SWBackend.DataBase;
-using SWBackend.Models.SignUp.Identity;
+using swbackend.Db.DataBase;
+using swbackend.Db.Models.SignUp.Identity;
 
-namespace SWBackend.Models.Token;
+namespace swbackend.Db.Models.Token;
 
 public class RefreshToken : IEntityTypeConfiguration<RefreshToken>
 {

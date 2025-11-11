@@ -16,9 +16,10 @@ using SWBackend.RepositoryLayer.IRepository.User;
 using SWBackend.RepositoryLayer.IRepository.WorkoutR;
 using SWBackend.ServiceLayer;
 using SWBackend.ServiceLayer.Auth;
+using SWBackend.ServiceLayer.Auth.Mail;
 using SWBackend.ServiceLayer.IService.IUserService;
+using SWBackend.ServiceLayer.IService.IWorkoutService;
 using SWBackend.ServiceLayer.Log;
-using SWBackend.ServiceLayer.Mail;
 using SWBackend.ServiceLayer.WorkoutS;
 
 var builder = WebApplication.CreateBuilder(args);

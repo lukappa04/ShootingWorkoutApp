@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SWBackend.Models.Log;
-using SWBackend.Models.SignUp.Identity;
-using SWBackend.Models.Token;
-using SWBackend.Models.Workout;
+using swbackend.Db.Models.Log;
+using swbackend.Db.Models.SignUp.Identity;
+using swbackend.Db.Models.Token;
+using swbackend.Db.Models.Workout;
 
-namespace SWBackend.DataBase;
+namespace swbackend.Db.DataBase;
 
 public class SwDbContext : IdentityDbContext<AppUser, IdentityRole<Guid>, Guid>
 {

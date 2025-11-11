@@ -4,6 +4,7 @@ using SWBackend.DataBase;
 using SWBackend.DTO.WorkoutDto.WorkoutPositionDto;
 using SWBackend.Models.Workout;
 using SWBackend.RepositoryLayer.IRepository.WorkoutR;
+using SWBackend.ServiceLayer.IService.IWorkoutService;
 
 namespace SWBackend.ServiceLayer.WorkoutS;
 

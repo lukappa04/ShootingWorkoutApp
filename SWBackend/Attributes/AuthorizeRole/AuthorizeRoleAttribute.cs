@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
-using SWBackend.Enum;
 
-namespace SWBackend.Attributes;
+namespace SWBackend.Attributes.AuthorizeRole;
 
 public class AuthorizeRolesAttribute : AuthorizeAttribute
 {

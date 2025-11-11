@@ -2,12 +2,12 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SWBackend.DataBase;
-using SWBackend.Enum;
-using SWBackend.Models.Token;
-using SWBackend.Models.Workout;
+using swbackend.Db.DataBase;
+using swbackend.Db.Enum;
+using swbackend.Db.Models.Token;
+using swbackend.Db.Models.Workout;
 
-namespace SWBackend.Models.SignUp.Identity;
+namespace swbackend.Db.Models.SignUp.Identity;
 
 public class AppUser : IdentityUser<Guid>, IEntityTypeConfiguration<AppUser>
 {

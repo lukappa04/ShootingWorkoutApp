@@ -1,4 +1,4 @@
-namespace SWBackend.Enum;
+namespace swbackend.Db.Enum;
 
 public enum Role
 {

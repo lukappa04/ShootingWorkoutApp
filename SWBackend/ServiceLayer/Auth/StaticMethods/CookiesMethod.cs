@@ -1,4 +1,4 @@
-﻿namespace SWBackend.ServiceLayer.Auth;
+﻿namespace SWBackend.ServiceLayer.Auth.StaticMethods;
 
 public static class CookiesMethod
 {
