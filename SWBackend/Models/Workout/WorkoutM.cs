@@ -18,5 +18,5 @@ public class WorkoutM : IObject
 
     public ICollection<WorkoutPositionM> Positions { get; set; } = new List<WorkoutPositionM>();
     public ICollection<WorkoutSessionM> Sessions { get; set; } = new List<WorkoutSessionM>();
-    public ICollection<ShotM> SessionShots { get; set; } = new List<ShotM>();
+    public ICollection<ShotM> Shots { get; set; } = new List<ShotM>();
 }

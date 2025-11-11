@@ -28,7 +28,7 @@ public class WorkoutRepository : IWorkoutRepository
 
     public async Task<List<WorkoutM>> GetWorkoutByNameAsync(string name)
     {
-        return await _context.Workouts.Where(wm => wm.WorkoutName.Contains(name)).ToListAsync();
+        return await _context.Workouts.Where(wm => wm.WorkoutName.ToLower().Contains(name.ToLower())).ToListAsync();
     }
 
     public Task<WorkoutM> GetWorkoutByUsernameAsync(string username)
@@ -42,4 +42,6 @@ public class WorkoutRepository : IWorkoutRepository
         await _context.SaveChangesAsync();
         return workout;
     }
+    
+   
 }

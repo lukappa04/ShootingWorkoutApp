@@ -5,7 +5,8 @@ namespace SWBackend.DTO.WorkoutDto;
 public class WorkoutResponseDto
 {
     [Required]
-    public string WorkoutName { get; set; }
-    public string UserId { get; set; } = string.Empty; 
+    public string WorkoutName { get; set; }  = string.Empty;
+    public int UserId { get; set; }
+    public int? WorkoutId { get; set; }
     
 }

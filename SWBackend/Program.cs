@@ -47,6 +47,12 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IWorkoutRepository, WorkoutRepository>();
 builder.Services.AddScoped<IWorkoutService, WorkoutService>();
 
+builder.Services.AddScoped<IPositionRepository, PositionRepository>();
+builder.Services.AddScoped<IPositionService, PositionService>();
+
+builder.Services.AddScoped<IWorkoutPositionRepository, WorkoutPositionRepository>();
+builder.Services.AddScoped<IWorkoutPositionService, WorkoutPositionService>();
+
 builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();

@@ -1,4 +1,5 @@
-﻿using System.Security.Claims;
+﻿using System.Diagnostics;
+using System.Security.Claims;
 using SWBackend.DTO.WorkoutDto;
 using SWBackend.Models.Workout;
 using SWBackend.RepositoryLayer.IRepository.User;
@@ -26,8 +27,10 @@ public class WorkoutService : IWorkoutService
     {
         var userId = _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         if (string.IsNullOrEmpty(userId))
-            //throw new UnauthorizedAccessException("Utente non autenticato");
+        {
             _logger.LogError("Utente non autenticato");
+            throw new UnauthorizedAccessException("Utente non autenticato");
+        }
         return userId;
     }
     
@@ -38,14 +41,27 @@ public class WorkoutService : IWorkoutService
         return result;
     }
 
-    public Task<WorkoutResponseDto> GetWorkoutByNameAsync(string workoutName)
+    public async Task<List<WorkoutResponseDto>> GetWorkoutByNameAsync(GetWorkoutByNameRequestDto request)
     {
-        throw new NotImplementedException();
+        var workoutByName = await _workoutRepository.GetWorkoutByNameAsync(request.WorkoutNameD); 
+        var result = workoutByName.Select(MapToDto).ToList();
+        if (result.Count == 0)
+        {
+            _logger.LogError("Workout name not found");
+            throw new KeyNotFoundException("Workout name not found");
+        }
+        return result;
     }
 
-    public Task<WorkoutResponseDto> GetWorkoutByIdAsync(string workoutId)
+    public async Task<WorkoutResponseDto> GetWorkoutByIdAsync(GetWorkoutByIdRequestDto request)
     {
-        throw new NotImplementedException();
+        var result = await _workoutRepository.GetWorkoutByIdAsync(request.IdD);
+        if (result == null)
+        {
+            _logger.LogError("Utente non trovato");
+            throw new KeyNotFoundException("Id not found");
+        }
+        return MapToDto(result);
     }
 
     public async Task<WorkoutResponseDto> CreateNewWorkoutAsync(CreateWorkoutRequestDto workout)
@@ -61,10 +77,13 @@ public class WorkoutService : IWorkoutService
         return MapToDto(result);
     }
     
+    
+    
     private static WorkoutResponseDto MapToDto(WorkoutM workout)
     {
         return new WorkoutResponseDto
         {
+            WorkoutId = workout.Id,
             WorkoutName = workout.WorkoutName
         };
     }

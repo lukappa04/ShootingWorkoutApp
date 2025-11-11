@@ -37,8 +37,7 @@ public class SWDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
  
         #region Workout
         modelBuilder.Entity<WorkoutM>()
-        .HasIndex(w => w.WorkoutName)
-        .IsUnique();
+            .HasIndex(w => new { w.UserId, w.WorkoutName }).IsUnique();
         #endregion
 
         #region FK
@@ -51,7 +50,7 @@ public class SWDbContext : IdentityDbContext<AppUser, IdentityRole<int>, int>
 
         modelBuilder.Entity<ShotM>()
         .HasOne(s => s.WSession)
-        .WithMany(s => s.SessionShots)
+        .WithMany(s => s.Shots)
         .HasForeignKey(s => s.SessionId)
         .OnDelete(DeleteBehavior.Cascade);
 
