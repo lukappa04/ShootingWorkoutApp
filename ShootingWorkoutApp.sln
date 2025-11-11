@@ -4,6 +4,12 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SWBackend", "SWBackend\SWBackend.csproj", "{743EC3D4-3141-A0BC-CA28-111C7DFADE7F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db", "db", "{300CFC07-3C5C-4B33-B953-A555A664F73E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "swbackend.Db", "swbackend.Db\swbackend.Db.csproj", "{C6E0F049-AC95-4BFF-8A96-1D1C18DDCB47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "swbackend.Db.Migrations", "swbackend.Db.Migrations\swbackend.Db.Migrations.csproj", "{627BB1B2-B8D5-4F7F-8112-ED6959CADCE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -14,11 +20,23 @@ Global
 		{743EC3D4-3141-A0BC-CA28-111C7DFADE7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{743EC3D4-3141-A0BC-CA28-111C7DFADE7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{743EC3D4-3141-A0BC-CA28-111C7DFADE7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6E0F049-AC95-4BFF-8A96-1D1C18DDCB47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6E0F049-AC95-4BFF-8A96-1D1C18DDCB47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6E0F049-AC95-4BFF-8A96-1D1C18DDCB47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6E0F049-AC95-4BFF-8A96-1D1C18DDCB47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{627BB1B2-B8D5-4F7F-8112-ED6959CADCE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{627BB1B2-B8D5-4F7F-8112-ED6959CADCE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{627BB1B2-B8D5-4F7F-8112-ED6959CADCE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{627BB1B2-B8D5-4F7F-8112-ED6959CADCE9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1448080F-7603-41DB-96C2-CFEA4E993BA6}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C6E0F049-AC95-4BFF-8A96-1D1C18DDCB47} = {300CFC07-3C5C-4B33-B953-A555A664F73E}
+		{627BB1B2-B8D5-4F7F-8112-ED6959CADCE9} = {300CFC07-3C5C-4B33-B953-A555A664F73E}
 	EndGlobalSection
 EndGlobal

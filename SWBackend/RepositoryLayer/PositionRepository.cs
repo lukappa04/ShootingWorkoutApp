@@ -7,9 +7,9 @@ namespace SWBackend.RepositoryLayer;
 
 public class PositionRepository : IPositionRepository
 {
-    private readonly SWDbContext _context;
+    private readonly SwDbContext _context;
 
-    public PositionRepository(SWDbContext context)
+    public PositionRepository(SwDbContext context)
     {
         _context = context;
     }

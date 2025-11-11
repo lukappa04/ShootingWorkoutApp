@@ -7,9 +7,9 @@ namespace SWBackend.RepositoryLayer;
 
 public class WorkoutRepository : IWorkoutRepository
 {
-    private readonly SWDbContext _context;
+    private readonly SwDbContext _context;
 
-    public WorkoutRepository(SWDbContext context)
+    public WorkoutRepository(SwDbContext context)
     {
         _context = context;
     }

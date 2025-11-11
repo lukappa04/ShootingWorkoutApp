@@ -10,11 +10,11 @@ namespace SWBackend.ServiceLayer.WorkoutS;
 public class WorkoutPositionService : IWorkoutPositionService
 {
     private readonly IWorkoutPositionRepository _workoutPositionRepository;
-    private readonly SWDbContext _context;
+    private readonly SwDbContext _context;
     private readonly ILogger<WorkoutPositionService> _logger;
 
     public WorkoutPositionService(IWorkoutPositionRepository workoutPositionRepository, 
-        ILogger<WorkoutPositionService> logger, SWDbContext context)
+        ILogger<WorkoutPositionService> logger, SwDbContext context)
     {
         _workoutPositionRepository = workoutPositionRepository;
         _logger = logger;

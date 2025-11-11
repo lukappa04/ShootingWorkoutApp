@@ -11,9 +11,9 @@ namespace SWBackend.RepositoryLayer;
 public class UserRepository : IUserRepository
 {
     private readonly UserManager<AppUser> _userManager;
-    private readonly SWDbContext _context;
+    private readonly SwDbContext _context;
 
-    public UserRepository(UserManager<AppUser> userManager, SWDbContext context)
+    public UserRepository(UserManager<AppUser> userManager, SwDbContext context)
     {
         _userManager = userManager;
         _context = context;

@@ -23,9 +23,9 @@ public class RefreshTokenController : ControllerBase
     private readonly IJwtService _jwtService;
     private readonly ITokenRepository _tokenRepository;
     private readonly UserManager<AppUser> _userManager;
-    private readonly SWDbContext _context;
+    private readonly SwDbContext _context;
 
-    public RefreshTokenController(ILogger<RefreshTokenController> logger, IJwtService jwtService, UserManager<AppUser> userManager, SWDbContext context, ITokenRepository tokenRepository)
+    public RefreshTokenController(ILogger<RefreshTokenController> logger, IJwtService jwtService, UserManager<AppUser> userManager, SwDbContext context, ITokenRepository tokenRepository)
     {
         _logger = logger;
         _jwtService = jwtService;

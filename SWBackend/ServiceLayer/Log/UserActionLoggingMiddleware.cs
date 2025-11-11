@@ -15,7 +15,7 @@ public class UserActionLoggingMiddleware
         _logger = logger;
     }
 
-    public async Task Invoke(HttpContext httpContext, SWDbContext dbContext)
+    public async Task Invoke(HttpContext httpContext, SwDbContext dbContext)
     {
         _logger?.LogInformation("UserActionLoggingMiddleware called");
         var user = httpContext.User.Identity?.IsAuthenticated == true ? httpContext.User : null;

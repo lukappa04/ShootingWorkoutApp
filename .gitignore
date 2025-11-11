@@ -3,6 +3,8 @@ bin
 appsettings.Development.json
 appsettings.json
 
+todo.txt
+
 obj
 
 .idea

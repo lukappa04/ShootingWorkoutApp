@@ -7,10 +7,10 @@ namespace SWBackend.RepositoryLayer;
 
 public class TokenRepository : ITokenRepository
 {
-    private readonly SWDbContext _context;
+    private readonly SwDbContext _context;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public TokenRepository(SWDbContext context, IHttpContextAccessor httpContextAccessor) 
+    public TokenRepository(SwDbContext context, IHttpContextAccessor httpContextAccessor) 
     {
         _context = context;
         _httpContextAccessor = httpContextAccessor;

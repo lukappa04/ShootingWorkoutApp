@@ -11,9 +11,9 @@ namespace SWBackend.Controllers.AuthUserController;
     public class LogoutController : ControllerBase
     {
         private readonly ILogger<LogoutController> _logger;
-        private readonly SWDbContext _context;
+        private readonly SwDbContext _context;
 
-        public LogoutController(ILogger<LogoutController> logger, SWDbContext context)
+        public LogoutController(ILogger<LogoutController> logger, SwDbContext context)
         {
             _logger = logger;
             _context = context;
