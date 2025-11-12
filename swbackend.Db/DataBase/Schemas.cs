@@ -1,4 +1,4 @@
-﻿namespace SWBackend.DataBase;
+﻿namespace swbackend.Db.DataBase;
 
 public static class Schemas
 {

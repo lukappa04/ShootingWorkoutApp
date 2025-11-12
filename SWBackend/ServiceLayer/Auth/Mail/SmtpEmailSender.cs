@@ -1,8 +1,7 @@
-
 using System.Net;
 using System.Net.Mail;
 
-namespace SWBackend.ServiceLayer.Mail;
+namespace SWBackend.ServiceLayer.Auth.Mail;
 
 public class SmtpEmailSender : IEmailerSender
 {

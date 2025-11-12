@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using SWBackend.DTO.UserDto;
 using SWBackend.Models.SignUp.Identity;
+using SWBackend.ServiceLayer.Auth.Mail;
 using SWBackend.ServiceLayer.IService.IUserService;
-using SWBackend.ServiceLayer.Mail;
 
 namespace SWBackend.Controllers.AuthUserController;
 

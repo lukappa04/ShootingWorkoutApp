@@ -1,4 +1,4 @@
-namespace SWBackend.ServiceLayer.Mail;
+namespace SWBackend.ServiceLayer.Auth.Mail;
 
 public interface IEmailerSender
 {

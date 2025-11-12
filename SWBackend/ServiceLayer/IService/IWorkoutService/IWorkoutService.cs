@@ -1,6 +1,6 @@
 ﻿using SWBackend.DTO.WorkoutDto;
 
-namespace SWBackend.ServiceLayer.WorkoutS;
+namespace SWBackend.ServiceLayer.IService.IWorkoutService;
 
 public interface IWorkoutService
 {

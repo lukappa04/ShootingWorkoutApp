@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SWBackend.DataBase;
-using SWBackend.Models.SignUp.Identity;
+using swbackend.Db.DataBase;
+using swbackend.Db.Models.SignUp.Identity;
 
-namespace SWBackend.Models.Workout;
+namespace swbackend.Db.Models.Workout;
 
 public class WorkoutM : IEntityTypeConfiguration<WorkoutM>
 {

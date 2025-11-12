@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SWBackend.DTO.WorkoutDto;
+using SWBackend.ServiceLayer.IService.IWorkoutService;
 using SWBackend.ServiceLayer.WorkoutS;
 
 namespace SWBackend.Controllers.WorkoutController

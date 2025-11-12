@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 
-namespace SWBackend.Models.SignUp.Identity;
+namespace swbackend.Db.Models.SignUp.Identity;
 
 public class AppRole : IdentityRole<int> { }

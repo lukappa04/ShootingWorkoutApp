@@ -9,6 +9,7 @@ using SWBackend.Models.Token;
 using SWBackend.RepositoryLayer.IRepository;
 using SWBackend.RepositoryLayer.IRepository.User;
 using SWBackend.ServiceLayer.Auth;
+using SWBackend.ServiceLayer.Auth.StaticMethods;
 using SWBackend.ServiceLayer.IService.IUserService;
 
 namespace SWBackend.Controllers.AuthUserController;

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SWBackend.DataBase;
 using SWBackend.ServiceLayer.Auth;
+using SWBackend.ServiceLayer.Auth.StaticMethods;
 
 namespace SWBackend.Controllers.AuthUserController;
     [Route("api/[controller]")]

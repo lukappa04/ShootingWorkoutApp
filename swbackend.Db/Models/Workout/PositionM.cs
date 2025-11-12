@@ -1,10 +1,9 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SWBackend.DataBase;
+using swbackend.Db.DataBase;
 
-namespace SWBackend.Models.Workout;
+namespace swbackend.Db.Models.Workout;
 
 public class PositionM : IEntityTypeConfiguration<PositionM>
 {
