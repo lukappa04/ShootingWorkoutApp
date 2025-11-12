@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SWBackend.Attributes;
 using SWBackend.Attributes.AuthorizeRole;
+using swbackend.Db.Enum;
+using swbackend.Db.Models.SignUp.Identity;
 using SWBackend.DTO.UserDto;
 using SWBackend.ServiceLayer.IService.IUserService;
 
@@ -12,21 +16,21 @@ namespace SWBackend.Controllers.UserController;
 [Tags("User")]
 public class GetUserByIdController : ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly UserManager<AppUser> _userManager;
     private readonly ILogger<GetUserByIdController> _logger;
 
-    public GetUserByIdController(IUserService userService, ILogger<GetUserByIdController> logger)
+    public GetUserByIdController(ILogger<GetUserByIdController> logger, UserManager<AppUser> userManager)
     {
-        _userService = userService;
         _logger = logger;
+        _userManager = userManager;
     }
 
     [HttpPost]
-    [AuthorizeRoles(Enum.Role.Admin)]
+    [AuthorizeRoles(Role.Admin)]
     public async Task<IActionResult> GetUserById(GetUserByIdRequestDto request)
     {
-        var result = await _userService.GetUserByIdAsync(request);
-        if (result == null) return BadRequest();
+        var result = await _userManager.Users.FirstOrDefaultAsync(u => u.Id == request.UserIdD);
+        if (result == null) return BadRequest("User not found");
         return Ok(result);
     }
 

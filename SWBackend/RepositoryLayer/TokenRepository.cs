@@ -27,7 +27,7 @@ public class TokenRepository : ITokenRepository
         return await _context.RefreshTokens.FirstOrDefaultAsync(rt => rt.TokenHash == refreshToken);
     }
 
-    public async Task RevokeAllRefreshTokensForUser(int userId)
+    public async Task RevokeAllRefreshTokensForUser(Guid userId)
     {
         var httpContext = _httpContextAccessor.HttpContext;
         string requestIp = httpContext?.Connection?.RemoteIpAddress?.ToString() ?? "unknown";

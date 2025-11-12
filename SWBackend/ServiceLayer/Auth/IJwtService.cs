@@ -1,3 +1,4 @@
+using swbackend.Db.Models.SignUp.Identity;
 using SWBackend.Models.SignUp.Identity;
 
 namespace SWBackend.ServiceLayer.Auth;
@@ -9,6 +10,6 @@ public interface IJwtService
     /// </summary>
     /// <param name="user"></param>
     /// <returns></returns>
-    string GenerateToken(AppUser user);
+    string GenerateToken(AppUser? user);
     string GenerateRefreshToken();
 }

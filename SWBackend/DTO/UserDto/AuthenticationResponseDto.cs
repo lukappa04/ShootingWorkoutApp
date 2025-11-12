@@ -1,4 +1,4 @@
-using SWBackend.Enum;
+using swbackend.Db.Enum;
 
 namespace SWBackend.DTO.UserDto;
 /// <summary>

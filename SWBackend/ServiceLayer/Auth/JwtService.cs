@@ -5,6 +5,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using swbackend.Db.Models.SignUp.Identity;
+
 namespace SWBackend.ServiceLayer.Auth;
 
 public class JwtService : IJwtService
@@ -14,7 +16,7 @@ public class JwtService : IJwtService
     {
         _configuration = configuration;
     }
-    public string GenerateToken(AppUser user)
+    public string GenerateToken(AppUser? user)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

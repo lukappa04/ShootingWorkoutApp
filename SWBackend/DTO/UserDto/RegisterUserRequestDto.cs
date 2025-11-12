@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using SWBackend.Enum;
 
 namespace SWBackend.DTO.UserDto;
 

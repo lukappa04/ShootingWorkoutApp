@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SWBackend.Models.SignUp.Identity;
+using swbackend.Db.Models.SignUp.Identity;
+
 
 namespace SWBackend.Controllers.AuthUserController;
 

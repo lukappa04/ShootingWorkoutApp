@@ -1,5 +1,3 @@
-using SWBackend.Enum;
-
 
 namespace SWBackend.DTO.UserDto;
 

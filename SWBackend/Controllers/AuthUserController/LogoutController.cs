@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SWBackend.DataBase;
+using swbackend.Db.DataBase;
 using SWBackend.ServiceLayer.Auth;
 using SWBackend.ServiceLayer.Auth.StaticMethods;
 

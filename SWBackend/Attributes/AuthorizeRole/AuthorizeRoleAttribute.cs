@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using swbackend.Db.Enum;
 
 namespace SWBackend.Attributes.AuthorizeRole;
 

@@ -2,8 +2,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using swbackend.Db.Models.SignUp.Identity;
 using SWBackend.DTO.UserDto;
-using SWBackend.Models.SignUp.Identity;
 using SWBackend.ServiceLayer.IService.IUserService;
 
 namespace SWBackend.Controllers.AuthUserController;

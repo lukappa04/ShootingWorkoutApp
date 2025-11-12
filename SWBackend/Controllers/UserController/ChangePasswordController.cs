@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SWBackend.Attributes;
 using SWBackend.Attributes.AuthorizeRole;
+using swbackend.Db.Enum;
 using SWBackend.DTO.UserDto;
-using SWBackend.Enum;
 using SWBackend.ServiceLayer.IService.IUserService;
 
 namespace SWBackend.Controllers.UserController;

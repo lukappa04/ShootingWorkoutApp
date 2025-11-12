@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using swbackend.Db.Models.SignUp.Identity;
 using SWBackend.DTO.UserDto;
-using SWBackend.Models.SignUp.Identity;
 using SWBackend.ServiceLayer.Auth.Mail;
 using SWBackend.ServiceLayer.IService.IUserService;
 

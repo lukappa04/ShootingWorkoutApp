@@ -12,8 +12,8 @@ using swbackend.Db.DataBase;
 namespace swbackend.Db.Migrations.Migrations
 {
     [DbContext(typeof(SwDbContext))]
-    [Migration("20251111230511_First")]
-    partial class First
+    [Migration("20251112191833_FirstMigrations")]
+    partial class FirstMigrations
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
